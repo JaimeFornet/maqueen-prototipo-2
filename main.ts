@@ -17,7 +17,7 @@ basic.forever(function () {
     FLL1 = DFRobotMaqueenPlus.readPatrol(Patrol.L1)
     FLR1 = DFRobotMaqueenPlus.readPatrol(Patrol.R1)
     FLL2 = DFRobotMaqueenPlus.readPatrol(Patrol.L2)
-    FLR2 = DFRobotMaqueenPlus.readPatrol(Patrol.R2)
+    FLR2 = 0
     DFRobotMaqueenPlus.mototStop(Motors.ALL)
     basic.pause(200)
     while (FLL1 == 1 || (FLR1 == 1 || (FLL2 == 1 || FLR2 == 1))) {
