@@ -34,12 +34,14 @@ function transitionIntersectionState () {
 function checkFrontalLine () {
     frontalLine = 0
     lineSensors()
+    basic.showNumber(4)
     while (!(FLL3) && !(FLR3)) {
-        DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, 20)
+        DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, 30)
         lineSensors()
     }
     DFRobotMaqueenPlus.mototStop(Motors.ALL)
-    if (FLL1 && FLR1) {
+    basic.showNumber(5)
+    if (FLL1 || FLR1) {
         frontalLine = 1
     }
     return frontalLine
