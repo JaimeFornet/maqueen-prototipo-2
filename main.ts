@@ -53,6 +53,15 @@ function correctPath (FLL2: number) {
         DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 20)
     }
 }
+function Giro () {
+    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 40)
+    while (FLL22 || FLR2) {
+        lineSensors()
+    }
+    while (!(FLL22 || FLR2)) {
+        lineSensors()
+    }
+}
 function followStraightLine () {
     basic.showNumber(0)
     lineSensors()
