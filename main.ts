@@ -1,23 +1,22 @@
 function correctPath (FLL2: number) {
     if (FLL2 == 1) {
-        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 50)
+        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 40)
         DFRobotMaqueenPlus.mototStop(Motors.M1)
     } else {
-        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 50)
+        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 40)
         DFRobotMaqueenPlus.mototStop(Motors.M2)
     }
 }
 function turningRight () {
     basic.showNumber(3)
-    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 50)
-    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CCW, 50)
-    basic.pause(500)
-    while (!(FLL1 && FLR1)) {
-        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 50)
-        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CCW, 50)
+    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 40)
+    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CCW, 40)
+    while (FLR2 && FLR1) {
         Sensors()
     }
-    basic.pause(100)
+    while (!(FLR2 && FLR1)) {
+        Sensors()
+    }
     DFRobotMaqueenPlus.mototStop(Motors.ALL)
     basic.showNumber(0)
 }
@@ -32,15 +31,14 @@ function Sensors () {
 }
 function turningLeft () {
     basic.showNumber(4)
-    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 50)
-    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CCW, 50)
-    basic.pause(600)
-    while (!(FLL1 && FLR1)) {
-        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 50)
-        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CCW, 50)
+    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 40)
+    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CCW, 40)
+    while (FLL1 && FLR1) {
         Sensors()
     }
-    basic.pause(100)
+    while (!(FLL1 && FLR1)) {
+        Sensors()
+    }
     DFRobotMaqueenPlus.mototStop(Motors.ALL)
     basic.showNumber(0)
 }
@@ -72,10 +70,9 @@ function turn (turnRight: number) {
             DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, 30)
             Sensors()
         }
-        basic.pause(700)
+        basic.pause(800)
         DFRobotMaqueenPlus.mototStop(Motors.ALL)
         basic.showNumber(1)
-        basic.pause(100)
         turningRight()
     } else {
         DFRobotMaqueenPlus.mototStop(Motors.ALL)
@@ -85,11 +82,11 @@ function turn (turnRight: number) {
 }
 let ultrasound = 0
 let FLR3 = 0
-let FLR2 = 0
 let FLL3 = 0
 let FLL2 = 0
-let FLR1 = 0
 let FLL1 = 0
+let FLR1 = 0
+let FLR2 = 0
 let stateOfMovement = 0
 stateOfMovement = 0
 DFRobotMaqueenPlus.PID(PID.OFF)
