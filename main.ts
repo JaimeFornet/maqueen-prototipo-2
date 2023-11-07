@@ -1,105 +1,101 @@
-function transitionIntersectionState () {
-    stateOfMovement = 1
-    turnLeft = 0
-    turnRight = 0
-    intersectionT1 = 0
-    intersectionT2 = 0
-    completeIntersection = 0
-    if (FLL22 && !(FLR2)) {
-        basic.showNumber(2)
-        basic.pause(1000)
-        if (checkFrontalLine()) {
-            intersectionT1 = 1
-        } else {
-            turnLeft = 1
-        }
-    } else if (FLR2 && !(FLL22)) {
-        basic.showNumber(1)
-        basic.pause(1000)
-        if (checkFrontalLine()) {
-            intersectionT1 = 1
-        } else {
-            turnRight = 1
-        }
-    } else if (FLR2 && FLL22) {
-        basic.showNumber(3)
-        basic.pause(1000)
-        if (checkFrontalLine()) {
-            intersectionT2 = 1
-        } else {
-            completeIntersection = 1
-        }
-    }
-}
-function checkFrontalLine () {
-    frontalLine = 0
-    lineSensors()
-    while (!(FLL3) && !(FLR3)) {
-        DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, 20)
-        lineSensors()
-    }
-    DFRobotMaqueenPlus.mototStop(Motors.ALL)
-    if (FLL1 && FLR1) {
-        frontalLine = 1
-    }
-    return frontalLine
-}
-function correctPath (FLL2: number) {
-    if (FLL2 == 1) {
-        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 40)
-        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 20)
-    } else {
-        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, 40)
-        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, 20)
-    }
-}
-function followStraightLine () {
+function followLine () {
     basic.showNumber(0)
-    lineSensors()
+    Sensors()
     while (stateOfMovement == 0) {
-        if (FLL22 || FLR2) {
-            correctPath(FLL22)
+        Sensors()
+        if (FLR2 || FLL2) {
+            correctPath(FLL2)
+        }
+        if (ultrasound < minDistance) {
+            turn(FLR2)
         }
         while (FLL1 && FLR1) {
-            if (FLL22 || FLR2) {
-                DFRobotMaqueenPlus.mototStop(Motors.ALL)
-                basic.pause(100)
-                lineSensors()
-                transitionIntersectionState()
+            if (ultrasound < minDistance) {
+                turn(FLR2)
             }
-            DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, 40)
-            lineSensors()
-            if (stateOfMovement) {
-                FLL1 = 0
+            if (FLR2) {
+                Sensors()
+                turn(FLR2)
             }
+            DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, Motor_Speed)
+            Sensors()
         }
-        lineSensors()
+        Sensors()
     }
     DFRobotMaqueenPlus.mototStop(Motors.ALL)
 }
-function lineSensors () {
-    FLL1 = DFRobotMaqueenPlus.readPatrol(Patrol.L1)
-    FLL22 = DFRobotMaqueenPlus.readPatrol(Patrol.L2)
-    FLL3 = DFRobotMaqueenPlus.readPatrol(Patrol.L3)
-    FLR1 = DFRobotMaqueenPlus.readPatrol(Patrol.R1)
-    FLR2 = DFRobotMaqueenPlus.readPatrol(Patrol.R2)
-    FLR3 = DFRobotMaqueenPlus.readPatrol(Patrol.R3)
+function correctPath (Left: number) {
+    if (Left == 1) {
+        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, Motor_Speed)
+        DFRobotMaqueenPlus.mototStop(Motors.M1)
+    } else {
+        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, Motor_Speed)
+        DFRobotMaqueenPlus.mototStop(Motors.M2)
+    }
 }
-let FLR1 = 0
-let FLL1 = 0
+function turningRight () {
+    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, Motor_Speed)
+    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CCW, Motor_Speed)
+    while (FLL1 && FLR1) {
+        Sensors()
+    }
+    while (!(FLL1 && FLR1)) {
+        Sensors()
+    }
+}
+function Sensors () {
+    FLL1 = 1 - DFRobotMaqueenPlus.readPatrol(Patrol.L1)
+    FLL2 = 1 - DFRobotMaqueenPlus.readPatrol(Patrol.L2)
+    FLL3 = 1 - DFRobotMaqueenPlus.readPatrol(Patrol.L3)
+    FLR1 = 1 - DFRobotMaqueenPlus.readPatrol(Patrol.R1)
+    FLR2 = 1 - DFRobotMaqueenPlus.readPatrol(Patrol.R2)
+    FLR3 = 1 - DFRobotMaqueenPlus.readPatrol(Patrol.R3)
+    ultrasound = DFRobotMaqueenPlus.ultraSonic(PIN.P2, PIN.P1)
+}
+function turningLeft () {
+    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, Motor_Speed)
+    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CCW, Motor_Speed)
+    while (FLL1 && FLR1) {
+        Sensors()
+    }
+    while (!(FLL1 && FLR1)) {
+        Sensors()
+    }
+}
+function turn (turnRight: number) {
+    if (turnRight == 1) {
+        DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, 25)
+        while (!(FLR3)) {
+            if (!(FLL1 && FLR1)) {
+                break;
+            }
+            Sensors()
+        }
+        basic.pause(800)
+        DFRobotMaqueenPlus.mototStop(Motors.ALL)
+        turningRight()
+    } else {
+        DFRobotMaqueenPlus.mototStop(Motors.ALL)
+        turningLeft()
+    }
+}
 let FLR3 = 0
 let FLL3 = 0
-let frontalLine = 0
+let FLR1 = 0
+let FLL1 = 0
+let ultrasound = 0
+let FLL2 = 0
 let FLR2 = 0
-let FLL22 = 0
-let completeIntersection = 0
-let intersectionT2 = 0
-let intersectionT1 = 0
-let turnRight = 0
-let turnLeft = 0
+let minDistance = 0
+let Motor_Speed = 0
 let stateOfMovement = 0
 stateOfMovement = 0
+Motor_Speed = 35
+minDistance = 7
 DFRobotMaqueenPlus.PID(PID.OFF)
 basic.forever(function () {
-    followStraightLine()
+    basic.showNumber(0)
+    followLine()
 })
+
+
