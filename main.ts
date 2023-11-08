@@ -26,16 +26,16 @@ function followLine () {
 }
 function correctPath (Left: number) {
     if (Left == 1) {
-        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, Motor_Speed)
+        DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, Rotation_Motor_Speed)
         DFRobotMaqueenPlus.mototStop(Motors.M1)
     } else {
-        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, Motor_Speed)
+        DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, Rotation_Motor_Speed)
         DFRobotMaqueenPlus.mototStop(Motors.M2)
     }
 }
 function turningRight () {
-    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, Motor_Speed)
-    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CCW, Motor_Speed)
+    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CW, Rotation_Motor_Speed)
+    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CCW, Rotation_Motor_Speed)
     while (FLL1 && FLR1) {
         Sensors()
     }
@@ -53,8 +53,8 @@ function Sensors () {
     ultrasound = DFRobotMaqueenPlus.ultraSonic(PIN.P2, PIN.P1)
 }
 function turningLeft () {
-    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, Motor_Speed)
-    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CCW, Motor_Speed)
+    DFRobotMaqueenPlus.mototRun(Motors.M2, Dir.CW, Rotation_Motor_Speed)
+    DFRobotMaqueenPlus.mototRun(Motors.M1, Dir.CCW, Rotation_Motor_Speed)
     while (FLL1 && FLR1) {
         Sensors()
     }
@@ -64,7 +64,7 @@ function turningLeft () {
 }
 function turn (turnRight: number) {
     if (turnRight == 1) {
-        DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, 25)
+        DFRobotMaqueenPlus.mototRun(Motors.ALL, Dir.CW, Motor_Speed - 10)
         while (!(FLR3)) {
             if (!(FLL1 && FLR1)) {
                 break;
@@ -87,15 +87,15 @@ let ultrasound = 0
 let FLL2 = 0
 let FLR2 = 0
 let minDistance = 0
+let Rotation_Motor_Speed = 0
 let Motor_Speed = 0
 let stateOfMovement = 0
 stateOfMovement = 0
-Motor_Speed = 35
+Motor_Speed = 40
+Rotation_Motor_Speed = 50
 minDistance = 7
 DFRobotMaqueenPlus.PID(PID.OFF)
 basic.forever(function () {
     basic.showNumber(0)
     followLine()
 })
-
-
